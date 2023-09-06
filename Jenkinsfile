@@ -6,7 +6,7 @@ pipeline {
             steps {
                 sh '''
                     cd ~/demo/
-                    git clone git@github.com:t-Shatterhand/Softserve_Demo-1.git
+                    git clone https://github.com/t-Shatterhand/Softserve_Demo-1.git
                 '''
             }
         }
