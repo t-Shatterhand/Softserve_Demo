@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block code_mirrorJs %}
+{% endblock %}
+
+{% block topBar_randomPasteJs %}
+{% endblock %}
+
+{%block button_send%}
+            {% if request.user.is_authenticated %}
+
+            <button id="buttonSettings" class="up_pan_buttons sendBtn" style="margin-top: 40px;" onclick="Send('{% url 'edit_user_paste' short_url=short_url %}', '{{ csrf_token }}')">Create paste</button>
+
+            {% else %}
+
+            <button class="up_pan_buttons sendBtn" onclick="Send('{% url 'edit_user_paste' short_url=short_url %}', '{{ csrf_token }}')">Create paste</button>
+
+            {% endif %}
+                {% endblock %}
+
+{% block endJs %}
+<script>
+    document.getElementById("mainTitle").innerHTML = '{{form.title.value}}';
+    var text_var = `{% autoescape off %}{{form.text.value}}{% endautoescape %}`;
+    document.getElementById("buttonSettings").innerHTML = 'Edit paste';
+    //document.getElementById("buttonSettings").onclick = Send(window.location.href, '{{ csrf_token }}');
+    //document.getElementById("buttonSettings").addEventListener('click',  Send(window.location.href, '{{ csrf_token }}'), false);
+
+    myCodeMirror.setOption("value", text_var);
+    language_select.value= `{{form.language.value}}`;
+    document.getElementById("title").value = `{{form.title.value}}`;
+    document.getElementById("id_expires").value = `{{form.expires.value}}`;
+    document.getElementById("id_category").value = `{{form.category.value}}`;
+    document.getElementById("isPrivate").checked = '{{form.is_private.value}}' == 'True'
+    document.getElementById("asGuest").checked = `{{form.as_guest.value}}`!= 'None';
+    console.log('start')
+    console.log(`{{form.as_guest.value}}`)
+    console.log(`{{form.is_private.value}}`)
+
+
+</script>
+{% endblock %}
+
+

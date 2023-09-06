@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+{% block styleBlock %}
+<style>
+
+
+
+
+    label{
+        font-family: 'JuraBold';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 30px;
+        width: 100%;
+        line-height: 24px;
+    }
+
+        .over_grid{
+            width: calc(100% - 100px);
+        }
+
+    input[type=submit]{
+            width: 100px;
+            height: 60px;
+            background: #000F2E;
+            border-radius: 10px;
+            font-family: 'JuraBold';
+            font-size: 30px;
+            color: #FFFFFF;
+            width: 500px;
+            margin-top: 23px;
+            justify-content:center;
+            position: relative;
+
+            margin: auto;
+            margin-top: 20px;
+            display: block;
+
+
+    }
+
+    input[type=text], input[type=email], input[type=password]{
+        font-family: 'JuraBold';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 28px;
+        width: 100%;
+        line-height: 24px;
+        border: 1px solid rgba(0, 15, 46, 0.5);
+        border-radius: 5px;
+    }
+    input[type=text]:focus{
+          outline: 0;
+      }
+
+
+
+
+</style>
+{% endblock %}
+{% block mainPart %}
+<div style="justify-content: center; display: grid;"  >
+    <div style="width: 878px; height: 688px; margin-top: 220px; ">
+
+                <div id="main_post" class="text_area"   >
+
+                <!--шапка поля -->
+                <div id ="mainTitle" class="over_grid over_title" style="background-color: #000F2E; ">
+                    User's Settings
+                </div>
+                  {% block mainPartContent %}
+                <!--текст нового пейсту-->
+                <div style="margin: 0px 50px 0px 50px; justify-content: center;">
+                   <form action="" method="post" style="display: grid;
+                   grid-template-columns: 200px auto; grid-row-gap: 30px; grid-column-gap:50px;  ">
+                        {% csrf_token %}
+                       {{form}}
+                       <div style="grid-column:  1/3;
+                        width: 100%; margin-top: 70px;">
+                           <input type="submit" value="Submit">
+                       </div>
+
+                     </form>
+                </div>
+                {% endblock %}
+            </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+<!--
+
+{% block main_panel %}
+    <h1>Hello, {{user_name}}!</h1>
+    <h2>Change username or email here, with password verification:</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Submit">
+    </form>
+        <a href="{% url 'password_reset' %}"><i>Change password</i></a>
+
+    <h2>{{error_text}}</h2>
+{% endblock %}
+{% block random_paste %}
+    <b>Random paste</b>
+    <br><a href="{{random_paste.short_url}}">{{ random_paste.title }}</a>
+    <br>{{ random_paste.text }}
+    <br>{{ random_paste.language }}
+    <br>{{ random_paste.category }}
+{% endblock %}
+{% block random_paste_expired %}
+    {% if random_paste_expires %}
+        <b><a href="{{random_paste_expired.short_url}}">{{ random_paste_expired.title }}</a></b>
+        <br>{{ random_paste_expires.text }}
+        <br>{{ random_paste_expires.language }}
+        <br>{{ random_paste_expires.category }}
+    {% else %}
+        <b>It will burn soon</b>
+        <br>Nothing
+        <br>is going
+        <br>to burn
+        <br>anytime
+        <br>soon
+    {% endif %}
+{% endblock %}-->

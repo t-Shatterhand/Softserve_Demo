@@ -1,0 +1,84 @@
+{% load static %}
+
+<html>
+ {% block content %}
+<head>
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{% static 'main.css' %}">
+
+	<title>Login</title>
+  <style>
+    .mainclass {
+    background: radial-gradient(56.06% 56.06% at 50% 50%, rgba(226, 238, 243, 0) 0%, #C1D4DE 100%);
+    mix-blend-mode: normal;
+    background-attachment: fixed;
+    font-family: JuraBold;
+  }
+  </style>
+
+</head>
+<body class="mainclass">
+<section>
+  <div class="mask d-flex align-items-center h-100 " style="padding-top:20px;">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+          <div class="card" style="background: linear-gradient(236.18deg, #16304B 16.12%, rgba(22, 48, 75, 0.58) 93.17%);
+box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.5);
+border-radius: 5px;">
+            <div class="card-body p-5 mt-5 mb-0">
+               <img src="{% static 'pngfolder/person.png' %}" width="130x" style="position: absolute;top: -65px;left: calc(50% - 65px);">
+
+              <form method="POST" enctype="multipart/form-data" class="inputfield">
+                {% csrf_token %}
+                <div class="row">
+
+                  <div class="col-sm-6"style="left: 20%">
+                    <input  name="username"  class="form-control"
+                                                maxlength="254" required id="id_username"
+                                               placeholder="Username" style="margin-top: 5%;width: 120%">
+                    <input  name="email"  class="form-control"
+                                                maxlength="254"
+                                               placeholder="Email" style="margin-top: 5%;width: 120%">
+                    <input  name="password1"  class="form-control"
+                                              type="password"
+                                                maxlength="254"
+                                               placeholder="Paswword" style="margin-top: 5%;width: 120%">
+                    <input  name="password2"  class="form-control"
+                                                maxlength="254"
+                                              type="password"
+                                          placeholder="Password" style="margin-top: 5%;width: 120%">
+<!--                    {{form.username}}-->
+<!--                    {{form.email}}-->
+<!--                    {{form.password1}}-->
+<!--                    {{form.password2}}-->
+                  </div>
+                </div>
+
+
+                <p class="text-center  mt-5 mb-0"style="color: white">Have already an account? <a href="{% url 'accounts:loginpage' %}" class="fw-bold text-body"><u style="color: cornflowerblue">Log in here</u></a></p>
+                <div class="btn" style="position: absolute; width: 85%;text-align:center;left:8%;margin-top:7%; background: rgba(0, 15, 46, 0.8);">
+                  <button type="submit" class="btn" value="Submit"
+                          style="  color:white;background-color: transparent; font-size: 30px">
+                    Register
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+{% endblock %}
+</html>

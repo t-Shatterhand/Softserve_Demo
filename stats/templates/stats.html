@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+<style>
+#div_piechart {
+font-family: 'JuraBold';
+  width: 80%;
+  height: 400px;
+}
+#div_barchart {
+font-family: 'JuraBold';
+  width: 80%;
+  height: 400px;
+}
+</style>
+{% block styleBlock %}
+<style>
+    .text_area {
+     grid-row: 1/3;
+     height: auto;
+    }
+    label{
+        font-family: 'JuraBold';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        width: 100%;
+        line-height: 24px;
+    }
+    h2{
+    font-family: 'JuraBold';
+        font-style: normal;
+        font-weight: 1400;
+        font-size: 32px;
+        width: 100%;
+        line-height: 24px;
+        text-decoration: underscore;
+    }
+</style>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+    <script src="{% static 'stats.js' %}"></script>
+
+{% endblock %}
+
+
+
+
+{% block mainPartContent %}
+
+            <div style="margin: 0px 50px 0px 50px">
+                <div style="display: grid; grid-template-columns:1fr 1fr 1fr;row-gap: 20px;">
+                <label>All present pastes:
+                {{ all_pastes }}</label>
+                <label>Private pastes:
+                {{ all_private }}</label>
+                <label>Public pastes:
+                {{ all_public }}</label>
+                <label>Available pastes:
+                {{ all_available }}</label>
+                <label>Pastes that expire soon:
+                {{ all_expire_soon }}</label>
+                <label>Permanent pastes:
+                {{ all_permanent }}</label>
+                </div>
+                <h2>Graphic representation:</h2>
+                <div id="div_piechart"></div>
+                <br>
+                <h2>Pastes created by time period:</h2>
+                <br>
+                <div id="div_barchart"></div>
+                <br>
+
+                {% if user_authenticated %}
+
+                <div style="display: grid; grid-template-columns:1fr 1fr 1fr;row-gap: 20px;">
+                <label>Your pastes:
+                    {{ user_all }}</label>
+
+                <label>Your private pastes:
+                {{ user_private }}</label>
+
+                <label>Your public pastes:
+                {{ user_public }}</label>
+
+                <label>Your available pastes:
+                {{ user_available }}</label>
+
+                <label>Your pastes that expire soon:
+                {{ user_expire_soon }}</label>
+
+                <label>Your permanent pastes:
+                {{ user_permanent }}</label>
+                </div>
+                <h2>Graphic representation:</h2>
+                <br>
+                <div id="div_userpiechart"></div>
+                <br>
+                <h2>Your pastes created by time period:</h2>
+                <br>
+                <div id="div_userbarchart"></div>
+                <br>
+
+                {% endif %}
+
+
+
+            </div>
+{% endblock %}
+
+ {% block settingsOfPaste %}
+ {% endblock %}
+
+
+
+{% block code_mirrorJs %}
+{% endblock %}
+
+{% block for_create_pasteJs %}
+{% endblock %}
+
+
+
+{% block endJs %}
+<script>
+    console.log('hhhhhhh')
+    render_graphs({{ all_last_hour }}, {{ all_last_8_hours }}, {{ all_last_day }}, {{ all_last_3_days }},
+{{ all_last_week }}, {{ all_last_month }}, {{ all_pastes }}, {{ all_public }}, {{ all_available }}, {{ all_expire_soon }},
+{{ all_permanent }});
+{% if user_authenticated %}
+render_user_graphs({{ user_last_hour }}, {{ user_last_8_hours }}, {{ user_last_day }}, {{ user_last_3_days }},
+{{ user_last_week }}, {{ user_last_month }}, {{ user_all }}, {{ user_public }}, {{ user_available }}, {{ user_expire_soon }},
+{{ user_permanent }})
+{% endif %}
+
+    document.body.addEventListener("load", function (){
+        console.log('stsrt');
+
+
+    });
+    document.getElementById("div_barchart").style.height = '500px'
+    document.getElementById("div_piechart").style.height = '500px'
+    document.getElementById("div_userpiechart").style.height = '500px'
+    document.getElementById("div_userbarchart").style.height = '500px'
+ document.getElementById("mainTitle").innerHTML = 'Statistics';
+
+</script>
+{% endblock %}
+
+

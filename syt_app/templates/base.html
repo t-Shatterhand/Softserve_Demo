@@ -1,0 +1,263 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SYT</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.47.0/codemirror.min.css">
+    <link rel="stylesheet" href="{% static 'landcss/light.css'%}">
+    <link rel="stylesheet" href="{% static 'landcss/dark.css'%}">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.47.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.47.0/mode/javascript/javascript.min.js"></script>
+    <script src="{% static 'js/clike.js'%}"></script>
+    <script src="{% static 'js/python.js'%}"></script>
+    <script src="{% static 'js/go.js'%}"></script>
+    <script src="{% static 'js/php.js'%}"></script>
+    <script src="{% static 'js/html.js'%}"></script>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link rel="stylesheet" href="{% static 'create_paste.css' %}">
+
+    <style>
+    .text_area {
+        background-color: white;
+        height: 664px;
+    }
+    </style>
+    {% block styleBlock %}
+    {% endblock %}
+</head>
+<body class="main_bg" style="display: block">
+
+{% block tabBar %}
+ <!-- верхнє меню -->
+    <ul class="transparent_bg " id="mynav" style="z-index: 1000; justify-content: center; padding-left: 50px; padding-right: 61px;  " >
+
+        {% block sign_in %}
+        {% if request.user.is_authenticated %}
+        <li style="height: 111px; width: 15%; margin-right: 70px;" >
+            <div class="up_pan_buttons up_button_text" >
+                <a href="{% url 'user_view' %}" class="up_pan_buttons_text">My profile</a>
+            </div>
+        </li>
+        {% else %}
+        <li style="height: 111px; width: 15%; margin-right: 70px;" >
+            <div class="up_pan_buttons up_button_text" >
+                <a href="{% url 'accounts:registerpage' %}" class="up_pan_buttons_text">Sign in</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endblock %}
+        {% block log_in %}
+        {% if request.user.is_authenticated %}
+        <li style=" width: 15%;">
+            <div class="up_pan_buttons up_button_text">
+                <a href="{% url 'accounts:logout' %}" class="up_pan_buttons_text">Log out</a>
+            </div>
+        </li>
+        {% else %}
+        <li style=" width: 15%;">
+            <div class="up_pan_buttons up_button_text">
+                <a href="{% url 'accounts:loginpage' %}" class="up_pan_buttons_text">Log in</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endblock %}
+        {% block create_paste %}
+        <li style=" width: 20%;"><a class="font40_bold up_pan_menu_label" href="{% url 'create_paste' %}">New Paste</a></li>
+        {% endblock %}
+        {% block public_pastes %}
+        <li style=" width: 20%;"><a class="font40_bold up_pan_menu_label" href="#news">Public pastes</a></li>
+        {% endblock %}
+        {% block statistics %}
+        <li style=" width: 20%;"><a class="font40_bold up_pan_menu_label" href="{% url 'statistics' %}">Statistics</a></li>
+        {% endblock %}
+        <li style=" width: 5%;">
+            <img src="{%static 'images/SYT_logo.png'%}" style="height: 93px; width: 66px; margin-top: 10px;"/>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block mainPart %}
+    <!--основна частина -->
+    <div class="main_grid" onLoad="await new Promise(resolve => setTimeout(resolve, 1000))">
+        <!--біле поле для нового пейсту-->
+        <div id="main_post" class="text_area"   >
+
+            <!--шапка поля -->
+            <div id ="mainTitle" class="over_grid over_title" style="background-color: #000F2E; ">
+                New paste
+            </div>
+              {% block mainPartContent %}
+            <!--текст нового пейсту-->
+            <div style="margin: 0px 50px 0px 50px">
+               <textarea id="codeeditor" rows="40" cols="100" class="child_text_area" ></textarea>
+            </div>
+            {% endblock %}
+        </div>
+        <!--поле для рандомного пейсту -->
+        <div class="sige_paste"  style=" border: #000F2E 1px; height: 664px; display: block; font-family: 'JuraBold' ">
+            <!--шапка поля -->
+            <div  class="over_grid_random over_title_random "  style="background-color: #000F2E; ">
+                Random paste
+            </div>
+            <!--заголовок для пейсту-->
+            <div  style=" height: 39px;  border-bottom: 1px solid #788897;">
+                <!--назва пейсту-->
+                <div  style="float: left; font-size: 22px; margin-left: 29px; color: #FFFFFF;" >
+                    <a href="{{random_paste.short_url}}" class="header_random_title">{{ random_paste.title }}</a>
+                </div>
+                <!--автор пейсту-->
+                 <div style="float: right; font-size: 16px; margin-right: 29px; color: #81C7EB;">
+                     {% if random_paste.author  %}
+                     {{ random_paste.author }}
+                     {% else %}
+                     Guest
+                     {% endif %}
+                </div>
+
+            </div>
+            <!--текст пейсту -->
+            <div id="randomCode" style="margin-top: 25px;">
+
+            </div>
+
+        </div>
+        {% block settingsOfPaste %}
+        <!--поле для налаштування нового пейсту -->
+        <div class="settings_area" style="background-color: white; "  >
+            <!--шапка поля-->
+            <div class="over_grid over_title" style="background-color: #000F2E; ">
+                Settings your paste
+            </div>
+            <!--налаштування-->
+            <div >
+                 <!--обрання мови-->
+
+                 <div class="labelInputDiv" style="margin-bottom: 60px; ">
+                     <label class="baseLabel" for="language">Language</label>
+                     {{form.language}}
+                </div>
+
+                <!--введення тайтлу-->
+                <div class="labelInputDiv">
+                    <label class="baseLabel" for="title">Title</label>
+
+                    <input class="baseInput" type="text" id="title" required
+                            size="10">
+
+                </div>
+                <!--обрання тривалості життя-->
+                 <div class="labelInputDiv">
+                     <label class="baseLabel" for="expires">Expires</label>
+                     {{form.expires}}
+                </div>
+                <!--обрання категорії-->
+                 <div class="labelInputDiv">
+                     <label class="baseLabel" for="category">Category</label>
+                    {{form.category}}
+                </div>
+                <!--приватне чи публічне-->
+                {% if request.user.is_authenticated %}
+                 <div class="labelInputDiv">
+                    <label class="baseLabel" for="isPrivate">Is private</label>
+
+                    <input class="baseInput, checkInput" type="checkbox" id="isPrivate" required
+                            size="10">
+                </div>
+                <!--як гість-->
+                <div class="labelInputDiv" >
+                    <label class="baseLabel" for="asGuest">As guest</label>
+
+                    <input class="baseInput, checkInput" type="checkbox"
+                           id="asGuest" required
+                            size="10">
+                </div>
+                {% endif %}
+            <!--кнопка створення-->
+                {%block button_send%}
+            {% if request.user.is_authenticated %}
+
+            <button id="buttonSettings" class="up_pan_buttons sendBtn" style="margin-top: 40px;" onclick="Send('{% url 'create_paste' %}', '{{ csrf_token }}')">Create paste</button>
+
+            {% else %}
+
+            <button class="up_pan_buttons sendBtn" onclick="Send('{% url 'create_paste' %}', '{{ csrf_token }}')">Create paste</button>
+
+            {% endif %}
+                {% endblock %}
+            </div>
+
+        </div>
+        {% endblock %}
+
+        <!--поле для рандомного, що згорає -->
+        <div class="sige_paste" style=" border: #000F2E 1px; height: 664px; display: block; font-family: 'JuraBold' "   >
+            <!--шапка поля-->
+            <div class="over_grid_random over_title_random" style="background-color: #000F2E; ">
+                It will burn soon
+            </div>
+            <!--заголовок для пейсту-->
+            <div style=" height: 39px;  border-bottom: 1px solid #788897;">
+                <!--назва пейсту-->
+                <div style="float: left; font-size: 22px; margin-left: 29px; color: #FFFFFF;" >
+                    <a href="{{random_paste_expires.short_url}}" class="header_random_title">{{ random_paste_expires.title }}</a>
+                </div>
+                <!--автор пейсту та термін-->
+                 <div style="float: right; font-size: 16px; margin-right: 29px; color: #81C7EB;">
+                     {% if random_paste_expires.author %}
+                     {{ random_paste_expires.author }} | {{ random_paste_expires.expires }}
+                     {% else %}
+                     Guest | {{ random_paste_expires.expires }}
+                     {% endif %}
+                </div>
+            </div>
+            <!--текст пейсту-->
+            <div id="randomCode2" style="margin-top: 25px;">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+</body>
+<footer>
+    <div style="height: 60px;">
+    </div>
+</footer>
+<script>
+    var random_paste_language = "{{ random_paste.language }}"
+    var burn_paste_language = "{{ random_paste_expires.language }}"
+    var random_paste = `{% autoescape off %}{{random_paste.text}}{% endautoescape %}`;
+    var burn_paste = `{% autoescape off %}{{random_paste_expires.text}}{% endautoescape %}`;
+
+</script>
+{% block for_create_pasteJs %}
+<script src="{%static 'js/for_create_paste.js'%}"></script>
+{% endblock %}
+
+{% block code_mirrorJs %}
+<script src="{%static 'js/code_mirror.js'%}"></script>
+{% endblock %}
+
+{% block topBar_randomPasteJs %}
+<script src="{%static 'js/topBar_randomPaste.js'%}"></script>
+{% endblock %}
+
+{% block endJs %}
+{% endblock %}
+<script>
+    function adjustZoom() {
+  var screenWidth = window.screen.width;
+  var zoomLevel = screenWidth / 1920; // 1920 - ширина, з якою порівнюємо
+
+  document.body.style.zoom = zoomLevel;
+}
+
+// Викликати функцію adjustZoom() при завантаженні сторінки та зміні розміру вікна браузера
+window.addEventListener('load', adjustZoom);
+window.addEventListener('resize', adjustZoom);
+</script>
+</html>

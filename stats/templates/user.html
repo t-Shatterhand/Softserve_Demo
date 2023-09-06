@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+{% load templatehelpers %}
+{% load static %}
+
+{% block styleBlock %}
+<style>
+    .text_area {
+     grid-row: 1/3;
+        height: auto;
+    }
+
+    table{
+
+        font-family: 'JuraBold';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+                width: 100%;
+        line-height: 24px;
+        /* identical to box height */
+
+
+        color: #000F2E;
+    }
+    td{
+        height: 50px;
+        border-bottom: 1px dashed  rgba(0, 15, 46, 0.35);;
+    }
+        th{
+        height: 50px;
+        border-bottom: 1px dashed  rgba(0, 15, 46, 0.35);;
+    }
+
+    label{
+        font-family: 'JuraBold';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        width: 100%;
+        line-height: 24px;
+    }
+    select{
+        height: 30px;
+           font-size: 18px;
+        width: 200px;
+    }
+     select {
+
+          background-position:
+            calc(100% - 10px) calc(1em - 8px),
+            calc(100% - 15px) calc(1em + 0px),
+            calc(100% - 2.5em) 0.5em;
+
+
+          background-size:
+            10px 10px,
+            10px 10px,
+            1px 1.5em;
+
+        }
+
+        select:focus {
+
+         background-position:
+            calc(100% - 10px) calc(1em - 8px),
+            calc(100% - 15px) calc(1em + 0px),
+            calc(100% - 2.5em) 0.5em;
+
+
+          background-size:
+            10px 10px,
+            10px 10px,
+            1px 1.5em;
+
+        }
+        .over_grid{
+            width: calc(100% - 100px);
+        }
+    #id_fil_sort_form{
+        display: grid;
+        grid-template-columns:1fr 1.5fr 1fr 1.5fr ;
+        row-gap: 1ch;
+        place-items: center;
+
+    }
+    #id_reverse_sorting{
+        float: right;
+    }
+    #id_search_string{
+        width: 200px;
+    }
+    input[type=submit]{
+            width: 100px;
+            height: 40px;
+            background: #000F2E;
+            border-radius: 10px;
+            font-family: 'JuraBold';
+            font-size: 25px;
+            color: #FFFFFF;
+            width: 500px;
+            margin-top: 23px;
+            justify-content:center;
+            position: relative;
+
+              margin: auto;
+        margin-top: 20px;
+            display: block;
+
+
+    }
+
+    input[type=text] {
+          font-family: 'JuraBold';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        width: 100%;
+        line-height: 24px;
+          border: 1px solid rgba(0, 15, 46, 0.5);
+            border-radius: 5px;
+    }
+      input[type=text]:focus{
+          outline: 0;
+      }
+    input[type=checkbox]{
+        height: 20px;
+            width: 20px;
+            float: left;
+            accent-color :#000F2E;
+    }
+    .pages a{
+       margin: 5px;
+
+            font-family: 'JuraBold';
+            font-size: 25px;
+            color: black;
+    }
+    button{
+            width: 90px;
+            height: 30px;
+            background: #000F2E;
+            border-radius: 10px;
+            font-family: 'JuraBold';
+            font-size: 16px;
+            color: #FFFFFF;
+
+            justify-content:center;
+            position: relative;
+
+    }
+    .main_button{
+        width: 200px;
+        height: 50px;
+        font-size: 28px;
+    }
+    .header_label{
+        font-size: 30px;
+        margin-right: 60px;
+
+
+    }
+    .underline{
+        border-bottom: 1px dashed #768696;
+        margin-left: -20px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+</style>
+
+<script src="{% static 'js/delete.js' %}">
+</script>
+
+{% endblock %}
+{% block mainPartContent %}
+<div>
+
+</div>
+<div class="underline"></div>
+
+ <div style="margin-bottom: 50px; ">
+     <label  class="header_label"> Filter: </label>
+
+ </div>
+<br>
+
+
+  <form id="id_fil_sort_form" method="get" >
+        {{ form}}
+        {{ sort_form }}
+      <div style="grid-column:  1/5;
+      width: 100%">
+            <input type="submit" value="Search">
+      </div>
+
+    </form>
+<div class="underline"></div>
+  <br>
+ <div style="margin-bottom: 50px; justify-content: center;">
+     <label  class="header_label"> Your pastes: </label>
+     <button class="main_button"  style="float: right; margin-right: 20px;">
+    <a href="{% url 'user_view' %}" style="color: white; text-decoration: none;">
+        Show all
+    </a>
+</button>
+ </div>
+
+  <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+            <td>
+                TITLE
+            </td>
+            <td>
+                STATUS
+            </td>
+            <td>
+                LANGUAGE
+            </td>
+            <td>
+                CATEGORY
+            </td>
+
+            <th colspan="2">
+                ACTIONS
+            </th>
+
+        </tr>
+      </thead>
+	{% for paste in paginated_pastes %}
+		<tr>
+			<td>
+				{{ paste.title }}
+            </td>
+            <td>
+                {% if paste.is_private %}
+	            Private
+                {% else %}
+                Public
+                {% endif %}
+            </td>
+            <td class="language_td">
+	            {{ paste.language }}
+            </td>
+            <td>
+	            {{ paste.category }}
+			</td>
+            <td>
+                <button class="actionbutton" onclick="window.location.href='{% url 'edit_user_paste' short_url=paste.short_url %}';">
+                    <span class="updatebutton">Edit</span>
+                </button>
+			</td>
+            <td>
+                 <button  onclick="delete_note('{% url 'delete_paste' paste.id %}', '{{ csrf_token }}');">
+                    <span>Delete</span>
+                </button>
+			</td>
+		</tr>
+	{% endfor %}
+</table>
+<div class="pages" style="display: flex;
+    justify-content: center;
+    width: auto;">
+  {% for i in paginated_pastes.paginator.page_range %}
+      <a  href="{% relative_url i 'page' request.GET.urlencode %}" >{{ i }}</a>
+  {% endfor %}
+</div>
+{% endblock %}
+
+<div>
+    {{ sort_form }}
+</div>
+{% block for_create_pasteJs %}
+{% endblock %}
+{% block code_mirrorJs %}
+{% endblock %}
+
+
+
+{% block settingsOfPaste %}
+{% endblock %}
+{% block endJs %}
+<script>
+ document.getElementById("mainTitle").innerHTML = '{{user_name}}';
+ var res =  document.getElementsByClassName("language_td") ;
+ console.log(res);
+ var language = {
+        "text/x-python" : "Python",
+        "text/x-csharp": "C#",
+        "text/x-c++src": "C++",
+        "text/x-go": "Go",
+        "text/javascript": "JavaScript",
+        "text/x-java": "Java",
+        "text/x-php": "PHP",
+        "text/x-csrc": "C"
+ };
+
+ for (let i = 0; i < res.length; i++) {
+  res[i].innerText= language[res[i].innerText]
+}
+
+
+</script>
+{% endblock %}

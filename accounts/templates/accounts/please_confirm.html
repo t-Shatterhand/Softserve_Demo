@@ -1,0 +1,34 @@
+{% load socialaccount %}
+{% load static %}
+<html>
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <title>Login</title>
+    <style>
+        body {
+            background: radial-gradient(56.06% 56.06% at 50% 50%, rgba(226, 238, 243, 0) 0%, #C1D4DE 100%);
+            mix-blend-mode: normal;
+            background-attachment: fixed;
+            font-family: JuraBold;
+        }
+    </style>
+
+</head>
+<body>
+<div style="margin: 0px 50px 0px 50px; justify-content: center; ">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;background: linear-gradient(236.18deg, #16304B 16.12%, rgba(22, 48, 75, 0.58) 93.17%); box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.5);border-radius: 5px;margin: 0px 50px 0px 50px; justify-content: center;">
+                    <i style="color:white">Please confirm your email address to complete the registration</i>
+                </div>
+ </div>
+</body>
+{% endblock %}
