@@ -6,16 +6,14 @@ pipeline {
             steps {
                 sh '''
                     cd ~/demo/
-                    eval `ssh-agent -s`
-                    ssh-add ~/.ssh/github
-                    git clone git@github.com:t-Shatterhand/Softserve-Demo-1.git
+                    git clone git@github.com:t-Shatterhand/Softserve_Demo-1.git
                 '''
             }
         }
         stage('Push') {
             steps {
                 sh '''
-                    cd ~/demo/Softserve-Demo-1/
+                    cd ~/demo/Softserve_Demo-1/
                     sudo docker build . -t kostroba/syt
                     sudo docker login -u AWS -p `aws ecr-public get-login-password --region us-east-1` public.ecr.aws/j4u1q4l9
                     sudo docker tag kostroba/syt public.ecr.aws/j4u1q4l9/syt
@@ -26,7 +24,7 @@ pipeline {
         stage('Destroy') {
             steps {
                 sh '''
-                    rm -rf ~/demo/Softserve-Demo-1
+                    rm -rf ~/demo/Softserve_Demo-1
                 '''
             }
         }
