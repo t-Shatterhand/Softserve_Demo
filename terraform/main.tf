@@ -1,5 +1,5 @@
 provider "aws" {
-    region = "eu-north-1"
+    region = "us-east-1"
 }
 
 module "vpc" {
@@ -9,7 +9,7 @@ module "vpc" {
     name = "my-vpc"
     cidr = "10.0.0.0/16"
 
-    azs             = ["eu-north-1a", "eu-north-1b"]
+    azs             = ["us-east-1a", "us-east-1b"]
     private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
     public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
 
@@ -41,7 +41,7 @@ module "public_ecr" {
     repository_name = "demo-2-syt"
     repository_type = "public"
 
-    repository_read_write_access_arns = [var.iam_arn]
+    repository_read_write_access_arns = []
     repository_lifecycle_policy = jsonencode({
         rules = [
         {
@@ -62,15 +62,14 @@ module "public_ecr" {
 
     public_repository_catalog_data = {
         description       = "Docker container for some things"
-        about_text        = file("${path.module}/files/ABOUT.md")
-        usage_text        = file("${path.module}/files/USAGE.md")
+        about_text        = "About text here"
+        usage_text        = "Usage text here"
         operating_systems = ["Linux"]
         architectures     = ["x86"]
-        logo_image_blob   = filebase64("${path.module}/files/clowd.png")
     }
 
     tags = {
         Terraform   = "true"
-        Environment = "dev"
+        Environment = "demo"
     }
 }

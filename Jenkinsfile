@@ -5,7 +5,7 @@ pipeline {
         stage('Clone repository') {
             steps {
                 sh '''
-                    cd ~/demo/
+                    cd ~
                     git clone https://github.com/t-Shatterhand/Softserve_Demo-1.git
                 '''
             }
