@@ -34,7 +34,7 @@ module "rds" {
     environment = var.environment
 }
 
-module "public_ecr" {
+module "ecr" {
     source = "terraform-aws-modules/ecr/aws"
     version = "1.6.0"
 
