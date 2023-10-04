@@ -27,7 +27,7 @@ pipeline {
             steps {
                 sh '''
                     cd ..
-                    sudo docker build . -t kostroba/syt -t `echo build-%BUILD_NUMBER%`
+                    sudo docker build . -t kostroba/syt -t `echo build-$BUILD_NUMBER`
                     sudo docker login -u AWS -p `aws ecr-public get-login-password --region us-east-1` `cat ecr_registry`
                     sudo docker tag kostroba/syt `cat ecr_url`
                     sudo docker push `cat ecr_url`
