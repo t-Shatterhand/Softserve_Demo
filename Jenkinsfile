@@ -26,7 +26,7 @@ pipeline {
         stage('Push to Registry') {
             steps {
                 sh '''
-                    cd ..
+                    cd ~/Softserve_Demo-1/
                     sudo docker build . -t kostroba/syt -t `echo build-$BUILD_NUMBER`
                     sudo docker login -u AWS -p `aws ecr-public get-login-password --region us-east-1` `cat ecr_registry`
                     sudo docker tag kostroba/syt `cat ecr_url`
