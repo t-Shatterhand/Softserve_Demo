@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone') {
+        stage('Clone repository') {
             steps {
                 sh '''
                     cd ~/demo/
@@ -10,37 +10,37 @@ pipeline {
                 '''
             }
         }
-        stage('Push') {
+        stage('Create EC Registry') {
             steps {
                 sh '''
-                    cd ~/demo/Softserve_Demo-1/
-                    sudo docker build . -t kostroba/syt
-                    sudo docker login -u AWS -p `aws ecr-public get-login-password --region us-east-1` public.ecr.aws/j4u1q4l9
-                    sudo docker tag kostroba/syt public.ecr.aws/j4u1q4l9/syt
-                    sudo docker push public.ecr.aws/j4u1q4l9/syt
+                    cd ~/demo/Softserve_Demo-1/terraform/
+                    terraform init
+                    terraform apply -auto-approve -target=module.ecr
+                    terraform output | grep "ecr_url" | cut -d " " -f 3 | cut -d '"' -f 2 > ecr_url
+                    cat ecr_url | rev | cut -d'/' -f2- | rev > ecr_registry
+                    echo ecr_url
+                    echo ecr_registry
+                '''
+            }
+        }
+        stage('Push to Registry') {
+            steps {
+                sh '''
+                    cd ..
+                    sudo docker build . -t kostroba/syt -t `echo build-%BUILD_NUMBER%`
+                    sudo docker login -u AWS -p `aws ecr-public get-login-password --region us-east-1` `cat ecr_registry`
+                    sudo docker tag kostroba/syt `ecr_url`
+                    sudo docker push `cat ecr_url`
+                    rm ecr_url ecr_registry
                 '''
             }
         }
         stage('Destroy') {
             steps {
                 sh '''
+                    cd ~
                     rm -rf ~/demo/Softserve_Demo-1
                 '''
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sshagent(credentials : ['Deployment_server_SSH_creds']) {
-                    sh '''
-                        ssh -tt -o StrictHostKeyChecking=no ec2-user@deployment.kostroba.pp.ua << EOF
-                        sudo docker ps -a -q | xargs sudo docker stop
-                        sudo docker ps -a -q | xargs sudo docker rm
-                        sudo docker pull public.ecr.aws/j4u1q4l9/syt
-                        sudo docker run -d -p 8080:8080 public.ecr.aws/j4u1q4l9/syt:latest
-                        exit
-                        EOF
-                    '''
-                }
             }
         }
     }

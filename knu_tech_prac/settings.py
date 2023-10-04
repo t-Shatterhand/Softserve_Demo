@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key
+import environ
+from os import getenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -132,8 +134,12 @@ WSGI_APPLICATION = 'knu_tech_prac.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': getenv("ENV_DB_ENGINE"),
+        'NAME': getenv("ENV_DB_NAME"),
+        'USER': getenv("ENV_DB_USER"),
+        'PASSWORD': getenv("ENV_DB_PASSWORD"),
+        'HOST': getenv("ENV_DB_HOST"),
+        'PORT': getenv("ENV_DB_PORT"),
     }
 }
 

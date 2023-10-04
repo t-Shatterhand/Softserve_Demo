@@ -24,3 +24,5 @@ sqlparse==0.4.4
 tzdata==2023.3
 urllib3==2.0.2
 django-extensions==3.2.3
+psycopg2-binary==2.9.8
+django-environ==0.11.2
