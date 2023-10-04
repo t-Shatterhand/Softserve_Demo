@@ -21,3 +21,7 @@ output "rds_status" {
 output "rds_engine" {
   value = module.rds.rds_engine
 }
+
+output "ecr_url" {
+    value = module.ecr.repository_url
+}
