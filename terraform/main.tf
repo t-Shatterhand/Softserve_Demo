@@ -33,7 +33,7 @@ module "vpc" {
 module "rds" {
     source = "./modules/RDS"
 
-    subnet_ids = module.vpc.private_subnets
+    subnet_ids = module.vpc.public_subnets
     vpc_id = module.vpc.vpc_id
     vpc_cidr_block = module.vpc.vpc_cidr_block
     environment = var.environment
