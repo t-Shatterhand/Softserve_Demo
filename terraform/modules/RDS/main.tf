@@ -71,7 +71,7 @@ resource "aws_db_subnet_group" "subnet_group" {
 resource "random_password" "db_pass"{
     length           = 16
     special          = true
-    override_special = "_%@"
+    override_special = "_%"
 }
 
 resource "aws_db_parameter_group" "db_param_group" {
