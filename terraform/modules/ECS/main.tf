@@ -39,10 +39,9 @@ resource "aws_launch_template" "ecs_launch_template" {
 }
 
 data "template_file" "user_data" {
-    template = file("user_data.sh")
-
+    template = "${file("${path.module}/user_data.sh")}"
     vars = {
-        ecs_cluster_name = aws_ecs_cluster.default.name
+        ecs_cluster_name = aws_ecs_cluster.cluster.name
     }
 }
 
@@ -98,7 +97,7 @@ resource "aws_ecs_service" "service" {
     deployment_maximum_percent         = var.ecs_task_deployment_maximum_percent
 
     load_balancer {
-        target_group_arn = aws_alb_target_group.service_target_group.arn
+        target_group_arn = var.target_group_arn
         container_name   = var.service_name
         container_port   = var.container_port
     }
@@ -176,7 +175,7 @@ resource "aws_ecs_task_definition" "default" {
     container_definitions = jsonencode([
         {
         name         = var.service_name
-        image        = "${aws_ecr_repository.ecr.repository_url}:latest"
+        image        = "${var.ecr_repository_url}:latest"
         cpu          = var.cpu_units
         memory       = var.memory
         essential    = true
