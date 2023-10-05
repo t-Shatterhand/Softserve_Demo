@@ -39,7 +39,8 @@ pipeline {
         stage('Provision infrastructure') {
             steps {
                 sh '''
-                    echo "Here be dragons"
+                    cd ~/Softserve_Demo-1/terraform/
+                    terraform apply -auto-approve
                 '''
             }
         }
