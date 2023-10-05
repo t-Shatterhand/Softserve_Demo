@@ -101,3 +101,61 @@ variable "ecr_repository_url" {
 variable "target_group_arn" {
     type = string
 }
+
+variable "maximum_scaling_step_size" {
+  description = "Maximum amount of EC2 instances that should be added on scale-out"
+  default     = 5
+  type        = number
+}
+
+variable "minimum_scaling_step_size" {
+  description = "Minimum amount of EC2 instances that should be added on scale-out"
+  default     = 1
+  type        = number
+}
+
+variable "target_capacity" {
+  description = "Amount of resources of container instances that should be used for task placement in %"
+  default     = 100
+  type        = number
+}
+
+variable "ecs_task_min_count" {
+  description = "How many ECS tasks should minimally run in parallel"
+  default     = 2
+  type        = number
+}
+
+variable "ecs_task_max_count" {
+  description = "How many ECS tasks should maximally run in parallel"
+  default     = 10
+  type        = number
+}
+
+variable "cpu_target_tracking_desired_value" {
+  description = "Target tracking for CPU usage in %"
+  default     = 70
+  type        = number
+}
+
+variable "memory_target_tracking_desired_value" {
+  description = "Target tracking for memory usage in %"
+  default     = 80
+  type        = number
+}
+
+variable "autoscaling_max_size" {
+  description = "Max size of the autoscaling group"
+  default     = 6
+  type        = number
+}
+
+variable "autoscaling_min_size" {
+  description = "Min size of the autoscaling group"
+  default     = 2
+  type        = number
+}
+
+variable "private_subnets_ids" {
+    type = list(string)
+}

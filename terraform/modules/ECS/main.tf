@@ -282,3 +282,111 @@ resource "aws_security_group" "ec2" {
         Name     = "demo-2_EC2_Instance_SecurityGroup_${var.environment}"
     }
 }
+
+## Creates Capacity Provider linked with ASG and ECS Cluster
+
+resource "aws_ecs_capacity_provider" "cas" {
+    name  = "demo-2_ECS_CapacityProvider_${var.environment}"
+
+    auto_scaling_group_provider {
+        auto_scaling_group_arn         = aws_autoscaling_group.ecs_autoscaling_group.arn
+        managed_termination_protection = "ENABLED"
+
+        managed_scaling {
+        maximum_scaling_step_size = var.maximum_scaling_step_size
+        minimum_scaling_step_size = var.minimum_scaling_step_size
+        status                    = "ENABLED"
+        target_capacity           = var.target_capacity
+        }
+    }
+}
+
+resource "aws_ecs_cluster_capacity_providers" "cas" {
+    cluster_name       = aws_ecs_cluster.default.name
+    capacity_providers = [aws_ecs_capacity_provider.cas.name]
+}
+
+## Define Target Tracking on ECS Cluster Task level
+
+resource "aws_appautoscaling_target" "ecs_target" {
+    max_capacity       = var.ecs_task_max_count
+    min_capacity       = var.ecs_task_min_count
+    resource_id        = "service/${aws_ecs_cluster.cluster.name}/${aws_ecs_service.service.name}"
+    scalable_dimension = "ecs:service:DesiredCount"
+    service_namespace  = "ecs"
+}
+
+## Policy for CPU tracking
+resource "aws_appautoscaling_policy" "ecs_cpu_policy" {
+    name               = "demo-2_CPUTargetTrackingScaling_${var.environment}"
+    policy_type        = "TargetTrackingScaling"
+    resource_id        = aws_appautoscaling_target.ecs_target.resource_id
+    scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
+    service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+
+    target_tracking_scaling_policy_configuration {
+        target_value = var.cpu_target_tracking_desired_value
+
+        predefined_metric_specification {
+        predefined_metric_type = "ECSServiceAverageCPUUtilization"
+        }
+    }
+}
+
+## Policy for memory tracking
+resource "aws_appautoscaling_policy" "ecs_memory_policy" {
+    name               = "demo-2_MemoryTargetTrackingScaling_${var.environment}"
+    policy_type        = "TargetTrackingScaling"
+    resource_id        = aws_appautoscaling_target.ecs_target.resource_id
+    scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
+    service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+
+    target_tracking_scaling_policy_configuration {
+        target_value = var.memory_target_tracking_desired_value
+
+        predefined_metric_specification {
+        predefined_metric_type = "ECSServiceAverageMemoryUtilization"
+        }
+    }
+}
+
+## Creates an ASG linked with our main VPC
+
+resource "aws_autoscaling_group" "ecs_autoscaling_group" {
+    name                  = "demo-2_ASG_${var.environment}"
+    max_size              = var.autoscaling_max_size
+    min_size              = var.autoscaling_min_size
+    vpc_zone_identifier   = var.private_subnets_ids
+    health_check_type     = "EC2"
+    protect_from_scale_in = true
+
+    enabled_metrics = [
+        "GroupMinSize",
+        "GroupMaxSize",
+        "GroupDesiredCapacity",
+        "GroupInServiceInstances",
+        "GroupPendingInstances",
+        "GroupStandbyInstances",
+        "GroupTerminatingInstances",
+        "GroupTotalInstances"
+    ]
+
+    launch_template {
+        id      = aws_launch_template.ecs_launch_template.id
+        version = "$Latest"
+    }
+
+    instance_refresh {
+        strategy = "Rolling"
+    }
+
+    lifecycle {
+        create_before_destroy = true
+    }
+
+    tag {
+        key                 = "Name"
+        value               = "demo-2_ASG_${var.environment}"
+        propagate_at_launch = true
+    }
+}
