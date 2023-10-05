@@ -33,7 +33,7 @@ module "vpc" {
 module "rds" {
     source = "./modules/RDS"
 
-    subnet_ids = module.vpc.public_subnets
+    subnet_ids = module.vpc.private_subnets
     vpc_id = module.vpc.vpc_id
     vpc_cidr_block = module.vpc.vpc_cidr_block
     environment = var.environment
@@ -99,12 +99,4 @@ module "alb" {
     source = "./modules/ALB"
     vpc_id = module.vpc.vpc_id
     subnets = module.vpc.public_subnets
-}
-
-module "dns" {
-    source = "./modules/DNS"
-
-    domain = var.domain
-    alb_domain_name = module.alb.alb_domain_name
-    alb_zone_id = module.alb.alb_zone_id
 }

@@ -40,8 +40,6 @@ pipeline {
             steps {
                 sh '''
                     cd ~/Softserve_Demo-1/terraform/
-                    terraform apply -auto-approve -target=module.rds
-                    terraform import module.dns.aws_route53_zone.kostroba Z0356560P3KP9VCUEGPC
                     terraform apply -auto-approve
                 '''
             }

@@ -25,3 +25,7 @@ output "rds_engine" {
 output "ecr_url" {
     value = module.ecr.repository_url
 }
+
+output "load_balancer_url" {
+    value = module.alb.alb_domain_name
+}
