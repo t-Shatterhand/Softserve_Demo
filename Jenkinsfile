@@ -46,8 +46,7 @@ pipeline {
         stage('Destroy') {
             steps {
                 sh '''
-                    cd ~/Softserve_Demo-1/terraform/
-                    terraform apply -auto-approve
+                    rm ~/Softserve_Demo-1/terraform/
                 '''
             }
         }
