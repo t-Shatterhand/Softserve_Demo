@@ -33,15 +33,21 @@ pipeline {
                     sudo docker tag kostroba/syt:latest `cat ~/Softserve_Demo-1/terraform/ecr_url`
                     sudo docker push `cat ~/Softserve_Demo-1/terraform/ecr_url`
                     sudo docker push `cat ~/Softserve_Demo-1/terraform/ecr_url`:build$BUILD_NUMBER
-                    rm ~/Softserve_Demo-1/terraform/ecr_url ~/Softserve_Demo-1/terraform/ecr_registry
+                '''
+            }
+        }
+        stage('Provision infrastructure') {
+            steps {
+                sh '''
+                    echo "Here be dragons"
                 '''
             }
         }
         stage('Destroy') {
             steps {
                 sh '''
-                    cd ~
-                    rm -rf ~/Softserve_Demo-1
+                    cd ~/Softserve_Demo-1/terraform/
+                    terraform apply -auto-approve
                 '''
             }
         }

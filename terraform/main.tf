@@ -2,6 +2,11 @@ provider "aws" {
     region = "us-east-1"
 }
 
+data "aws_ssm_parameter" "db_pass" {
+    name = "db_pass"
+    depends_on = [module.rds]
+}
+
 module "vpc" {
     source = "terraform-aws-modules/vpc/aws"
     version = "5.1.2"
@@ -72,4 +77,24 @@ module "ecr" {
         Terraform   = "true"
         Environment = "demo"
     }
+}
+
+module "ecs" {
+    source = "./modules/ECS"
+
+    db_host = module.rds.rds_hostname
+    db_name = module.rds.rds_db_name
+    db_port = module.rds.rds_port
+    db_user = module.rds.rds_username
+    db_password = aws_ssm_parameter.db_pass.value
+    security_group_alb_id = module.alb.security_group_alb_id
+    vpc_id = module.vpc.vpc_id
+    environment = var.environment
+}
+
+module "alb" {
+    source = "./modules/ALB"
+
+    vpc_id = module.vpc.vpc_id
+    subnets = module.vpc.public_subnets
 }
