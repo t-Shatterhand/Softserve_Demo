@@ -302,7 +302,7 @@ resource "aws_ecs_capacity_provider" "cas" {
 }
 
 resource "aws_ecs_cluster_capacity_providers" "cas" {
-    cluster_name       = aws_ecs_cluster.default.name
+    cluster_name       = aws_ecs_cluster.cluster.name
     capacity_providers = [aws_ecs_capacity_provider.cas.name]
 }
 

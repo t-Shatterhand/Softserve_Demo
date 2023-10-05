@@ -46,7 +46,7 @@ pipeline {
         stage('Destroy') {
             steps {
                 sh '''
-                    rm ~/Softserve_Demo-1/terraform/
+                    rm -rf ~/Softserve_Demo-1/
                 '''
             }
         }
