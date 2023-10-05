@@ -40,7 +40,7 @@ pipeline {
             steps {
                 sh '''
                     cd ~/Softserve_Demo-1/terraform/
-                    terraform import 'dns.aws_route53_zone.kostroba' Z0356560P3KP9VCUEGPC
+                    terraform import module.dns.aws_route53_zone.kostroba Z0356560P3KP9VCUEGPC
                     terraform apply -auto-approve
                 '''
             }
