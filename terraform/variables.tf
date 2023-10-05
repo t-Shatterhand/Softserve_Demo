@@ -1,3 +1,7 @@
 variable "environment" {
-    default = "demo-2"
+    default = "dev"
+}
+
+variable "domain" {
+  default = "kostroba.pp.ua"
 }
