@@ -32,6 +32,7 @@ pipeline {
                     sudo docker tag kostroba/syt:build$BUILD_NUMBER `cat ~/Softserve_Demo-1/terraform/ecr_url`
                     sudo docker tag kostroba/syt:latest `cat ~/Softserve_Demo-1/terraform/ecr_url`
                     sudo docker push `cat ~/Softserve_Demo-1/terraform/ecr_url`
+                    sudo docker push `cat ~/Softserve_Demo-1/terraform/ecr_url:build$BUILD_NUMBER`
                     rm ~/Softserve_Demo-1/terraform/ecr_url ~/Softserve_Demo-1/terraform/ecr_registry
                 '''
             }
