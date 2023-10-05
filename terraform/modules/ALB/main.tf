@@ -9,6 +9,14 @@ resource "aws_security_group" "alb" {
     description = "Security group for ALB"
     vpc_id      = var.vpc_id
 
+    ingress {
+        description = "Allow all port 8080 ingress traffic"
+        from_port   = 8080
+        to_port     = 8080
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
     egress {
         description = "Allow all egress traffic"
         from_port   = 0
@@ -22,6 +30,7 @@ resource "aws_security_group" "alb" {
     }
 }
 
+<<<<<<< HEAD
 
 resource "aws_lb_listener" "alb_default_listener_http" {
     load_balancer_arn = aws_alb.alb.arn
@@ -52,4 +61,25 @@ resource "aws_alb_target_group" "service_target_group" {
     }
     
     depends_on = [aws_alb.alb]
+=======
+resource "aws_alb_target_group" "service_target_group" {
+  name                 = "demo-2-TargetGroup-${var.environment}"
+  port                 = "8080"
+  protocol             = "HTTP"
+  vpc_id               = var.vpc_id
+  deregistration_delay = 120
+
+  health_check {
+    healthy_threshold   = "2"
+    unhealthy_threshold = "2"
+    interval            = "60"
+    matcher             = var.healthcheck_matcher
+    path                = var.healthcheck_endpoint
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = "30"
+  }
+  
+  depends_on = [aws_alb.alb]
+>>>>>>> 916e6f03689e7d045a1418f37fce28149db0e54f
 }
