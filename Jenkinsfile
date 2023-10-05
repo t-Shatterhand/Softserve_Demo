@@ -16,7 +16,7 @@ pipeline {
                     cd ~/Softserve_Demo-1/terraform/
                     terraform init
                     terraform apply -auto-approve -target=module.ecr
-                    terraform output | grep "ecr_url" | cut -d " " -f 3 | cut -d '"' -f 2 > ecr_url
+                    terraform output -raw ecr_url > ecr_url
                     cat ecr_url | rev | cut -d'/' -f2- | rev > ecr_registry
                     cat ecr_url
                     cat ecr_registry
@@ -27,9 +27,9 @@ pipeline {
             steps {
                 sh '''
                     cd ~/Softserve_Demo-1/
-                    sudo docker build . -t kostroba/syt -t `echo build-$BUILD_NUMBER`
+                    sudo docker build . -t kostroba/syt:build$BUILD_NUMBER
                     sudo docker login -u AWS -p `aws ecr-public get-login-password --region us-east-1` `cat ~/Softserve_Demo-1/terraform/ecr_registry`
-                    sudo docker tag kostroba/syt `cat ~/Softserve_Demo-1/terraform/ecr_url`
+                    sudo docker tag kostroba/syt$BUILD_NUMBER `cat ~/Softserve_Demo-1/terraform/ecr_url`
                     sudo docker push `cat ~/Softserve_Demo-1/terraform/ecr_url`
                     rm ~/Softserve_Demo-1/terraform/ecr_url ~/Softserve_Demo-1/terraform/ecr_registry
                 '''
