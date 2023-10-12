@@ -36,14 +36,6 @@ resource "aws_security_group" "db_allow" {
         cidr_blocks      = [var.vpc_cidr_block]
     }
 
-    ingress {
-        description      = "Allow ALL traffic from my own ip"
-        from_port        = 0
-        to_port          = 0
-        protocol         = "-1"
-        cidr_blocks      = ["195.211.142.172/32"]
-    }
-
     egress {
         from_port        = 0
         to_port          = 0
