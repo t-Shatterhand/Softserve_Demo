@@ -1,4 +1,4 @@
-# Softserve_Demo-1
+# Softserve Demo
 Demo Project to demonstrate the pipeline flow via Jenkins and AWS services
 
 
