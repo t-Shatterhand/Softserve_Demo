@@ -17,7 +17,7 @@ data "aws_lb" "ingress_alb" {
   tags = var.alb_tag
 
   depends_on = [
-    kubernetes_ingress_v1.example_ingress
+    kubernetes_ingress_v1.shareyourtext_ingress
   ]
 }
 

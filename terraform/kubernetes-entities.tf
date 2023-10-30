@@ -1,8 +1,8 @@
-resource "kubernetes_deployment" "nginx" {
+resource "kubernetes_deployment" "shareyourtext" {
   metadata {
-    name = "scalable-nginx-example"
+    name = "shareyourtext"
     labels = {
-      App = "ScalableNginxExample"
+      App = "shareyourtext"
     }
   }
 
@@ -10,13 +10,13 @@ resource "kubernetes_deployment" "nginx" {
     replicas = 2
     selector {
       match_labels = {
-        App = "ScalableNginxExample"
+        App = "shareyourtext"
       }
     }
     template {
       metadata {
         labels = {
-          App = "ScalableNginxExample"
+          App = "shareyourtext"
         }
       }
       spec {
@@ -74,10 +74,10 @@ resource "kubernetes_deployment" "nginx" {
   }
 }
 
-resource "kubernetes_ingress_v1" "example_ingress" {
+resource "kubernetes_ingress_v1" "shareyourtext_ingress" {
   wait_for_load_balancer = true
   metadata {
-    name = "example-ingress"
+    name = "shareyourtext-ingress"
     annotations = {
       "alb.ingress.kubernetes.io/scheme" = "internet-facing"
       "alb.ingress.kubernetes.io/certificate-arn": module.dns.certificate_arn
@@ -91,7 +91,7 @@ resource "kubernetes_ingress_v1" "example_ingress" {
     ingress_class_name = "alb"
     default_backend {
       service {
-        name = "scalable-nginx-service"
+        name = "shareyourtext"
         port {
           number = 80
         }
@@ -103,7 +103,7 @@ resource "kubernetes_ingress_v1" "example_ingress" {
         path {
           backend {
             service {
-              name = kubernetes_service_v1.scalable_nginx_service.metadata[0].name
+              name = kubernetes_service_v1.shareyourtext_service.metadata[0].name
               port {
                 number = 80
               }
@@ -122,14 +122,14 @@ resource "kubernetes_ingress_v1" "example_ingress" {
   ]
 }
 
-resource "kubernetes_service_v1" "scalable_nginx_service" {
+resource "kubernetes_service_v1" "shareyourtext_service" {
   metadata {
-    name = "scalable-nginx-service"
+    name = "shareyourtext"
   }
 
   spec {
     selector = {
-      App = "ScalableNginxExample"
+      App = "shareyourtext"
     }
 
     port {

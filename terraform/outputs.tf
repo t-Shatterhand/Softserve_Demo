@@ -27,5 +27,5 @@ output "ecr_url" {
 }
 
 output "alb_hostname" {
-  value = kubernetes_ingress_v1.example_ingress.status[0].load_balancer[0].ingress[0].hostname
+  value = kubernetes_ingress_v1.shareyourtext_ingress.status[0].load_balancer[0].ingress[0].hostname
 }
