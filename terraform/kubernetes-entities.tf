@@ -21,7 +21,7 @@ resource "kubernetes_deployment" "nginx" {
       }
       spec {
         container {
-          image = "public.ecr.aws/j4u1q4l9/demo-2-syt:latest"
+          image = "${module.ecr.repository_url}:latest"
           name  = "demo-3-syt"
 
           env {
