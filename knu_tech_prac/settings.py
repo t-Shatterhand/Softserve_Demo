@@ -28,7 +28,10 @@ SECRET_KEY = get_random_secret_key()
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://deployment.kostroba.pp.ua/']
+CSRF_TRUSTED_ORIGINS = ['http://*.kostroba.pp.ua/',
+                        'https://*.kostroba.pp.ua/',
+                        'http://app.kostroba.pp.ua/',
+                        'https://app.kostroba.pp.ua/']
 
 # Application definition
 
@@ -65,9 +68,9 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-LOGIN_REDIRECT_URL = 'http://deployment.kostroba.pp.ua:8000/'
-LOGOUT_REDIRECT_URL = 'http://deployment.kostroba.pp.ua:8000/'
-SOCIAL_AUTH_NEW_USER_REDIRECT_URL='http://deployment.kostroba.pp.ua:8000/'
+LOGIN_REDIRECT_URL = 'https://app.kostroba.pp.ua/'
+LOGOUT_REDIRECT_URL = 'https://app.kostroba.pp.ua/'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL='https://app.kostroba.pp.ua/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 SITE_ID = 1
 

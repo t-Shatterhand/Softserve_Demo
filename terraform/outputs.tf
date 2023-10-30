@@ -26,6 +26,6 @@ output "ecr_url" {
     value = module.ecr.repository_url
 }
 
-output "load_balancer_url" {
-    value = module.alb.alb_domain_name
+output "alb_hostname" {
+  value = kubernetes_ingress_v1.example_ingress.status[0].load_balancer[0].ingress[0].hostname
 }

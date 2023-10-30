@@ -3,7 +3,7 @@ resource "aws_db_instance" "rds_for_demo" {
     max_allocated_storage  = 20
     engine                 = "postgres"
     engine_version         = "15.3"
-    identifier             = "demo-2-postgresql"
+    identifier             = "demo-3-postgresql"
     instance_class         = var.db_instance_class
     username               = var.db_master_username
     db_name                = var.db_name
@@ -13,7 +13,7 @@ resource "aws_db_instance" "rds_for_demo" {
     parameter_group_name   = aws_db_parameter_group.db_param_group.name
     skip_final_snapshot    = true
     storage_encrypted      = false
-    publicly_accessible    = true
+    publicly_accessible    = false
     apply_immediately      = true
 
     tags = {

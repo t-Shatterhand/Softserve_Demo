@@ -1,11 +1,7 @@
-variable "domain" {
-    type = string
+output "certificate_arn" {
+  value = aws_acm_certificate.cert.arn
 }
 
-variable "alb_domain_name" {
-    type = string
-}
-
-variable "alb_zone_id" {
-    type = string
+output "zone_id" {
+  value = aws_route53_zone.hosted_zone.zone_id
 }

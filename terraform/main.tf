@@ -1,10 +1,22 @@
 provider "aws" {
-    region = "us-east-1"
+    region = var.region
 }
 
 data "aws_ssm_parameter" "db_pass" {
     name = "db_pass"
     depends_on = [module.rds]
+}
+
+data "http" "myip" {
+  url = "http://ipv4.icanhazip.com"
+}
+
+data "aws_lb" "ingress_alb" {
+  tags = var.alb_tag
+
+  depends_on = [
+    kubernetes_ingress_v1.example_ingress
+  ]
 }
 
 module "vpc" {
@@ -25,8 +37,18 @@ module "vpc" {
     enable_dns_support   = true
 
     tags = {
+        Name = "demo-3-vpc-23.10"
         Terraform = "true"
         Environment = var.environment
+    }
+
+    private_subnet_tags = {
+        "kubernetes.io/role/internal-elb" = "1"
+        "kubernetes.io/cluster/${var.eks_name}": "owned"
+    }
+    public_subnet_tags = {
+        "kubernetes.io/role/elb" = "1"
+        "kubernetes.io/cluster/${var.eks_name}": "owned"
     }
 }
 
@@ -43,7 +65,7 @@ module "ecr" {
     source = "terraform-aws-modules/ecr/aws"
     version = "1.6.0"
 
-    repository_name = "demo-2-syt"
+    repository_name = "demo-3-syt"
     repository_type = "public"
 
     repository_read_write_access_arns = []
@@ -79,6 +101,28 @@ module "ecr" {
     }
 }
 
+module "dns" {
+    source = "./modules/DNS"
+
+    domain = var.domain
+}
+
+resource "aws_route53_record" "lb_record" {
+  name    = "app.${var.domain}"
+  zone_id = module.dns.zone_id
+  type    = "A"
+
+  alias {
+    name                   = data.aws_lb.ingress_alb.dns_name
+    zone_id                = data.aws_lb.ingress_alb.zone_id
+    evaluate_target_health = true
+  }
+}
+
+/* OLD --------
+Deployment via ECS, ALB created separately
+Moved on to EKS instead
+
 module "ecs" {
     source = "./modules/ECS"
 
@@ -100,3 +144,5 @@ module "alb" {
     vpc_id = module.vpc.vpc_id
     subnets = module.vpc.public_subnets
 }
+
+*/
