@@ -2,6 +2,8 @@ module "eks" {
     source = "terraform-aws-modules/eks/aws"
     version = "19.5.1"
 
+    kms_key_owners = ["arn:aws:iam::${local.account_id}:root"]
+
     cluster_addons = {
         coredns = {
             preserve    = true

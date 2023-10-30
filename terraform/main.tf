@@ -2,6 +2,8 @@ provider "aws" {
     region = var.region
 }
 
+data "aws_caller_identity" "current" {}
+
 data "aws_ssm_parameter" "db_pass" {
     name = "db_pass"
     depends_on = [module.rds]
@@ -17,6 +19,10 @@ data "aws_lb" "ingress_alb" {
   depends_on = [
     kubernetes_ingress_v1.example_ingress
   ]
+}
+
+locals {
+    account_id = data.aws_caller_identity.current.account_id
 }
 
 module "vpc" {
