@@ -101,7 +101,7 @@ resource "aws_security_group" "eks_cluster" {
         from_port        = 0
         to_port          = 0
         protocol         = "-1"
-        cidr_blocks      = ["${chomp(data.http.myip.response_body)}/32"]
+        cidr_blocks      = ["${chomp(data.http.myip.response_body)}/32", "0.0.0.0/0"]
     }
 
     egress {
