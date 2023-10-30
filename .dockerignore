@@ -23,7 +23,6 @@ src/{{ project_name }}/settings/local.py
 src/node_modules
 web/media
 web/static/CACHE
-stats
 Dockerfile
 Jenkinsfile
 README.media
