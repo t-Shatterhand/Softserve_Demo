@@ -44,7 +44,10 @@ pipeline {
                 sh '''
                     cd ~/Softserve_Demo/terraform/
                     terraform apply -auto-approve
+                    aws eks update-kubeconfig --region us-east-1 --name demo-3-EKS
+                    kubectl rollout restart deployment scalable-nginx-example
                 '''
+                //in last command change deployment name to shareyourtext; nginx-example name is old and would be changed if redeployed
                 }
             }
         }
