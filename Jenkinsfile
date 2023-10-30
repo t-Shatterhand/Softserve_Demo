@@ -12,6 +12,7 @@ pipeline {
         }
         stage('Create EC Registry') {
             steps {
+                withAWS(credentials: 'aws-jenkins-credentials', region: 'us-east-1') {
                 sh '''
                     cd ~/Softserve_Demo/terraform/
                     terraform init
@@ -19,10 +20,12 @@ pipeline {
                     terraform output -raw ecr_url > ecr_url
                     cat ecr_url | rev | cut -d'/' -f2- | rev > ecr_registry
                 '''
+                }
             }
         }
         stage('Push to Registry') {
             steps {
+                withAWS(credentials: 'aws-jenkins-credentials', region: 'us-east-1') {
                 sh '''
                     cd ~/Softserve_Demo/
                     sudo docker build . -t kostroba/syt:latest -t kostroba/syt:build$BUILD_NUMBER
@@ -32,14 +35,17 @@ pipeline {
                     sudo docker push `cat ~/Softserve_Demo/terraform/ecr_url`
                     sudo docker push `cat ~/Softserve_Demo/terraform/ecr_url`:build$BUILD_NUMBER
                 '''
+                }
             }
         }
         stage('Provision infrastructure') {
             steps {
+                withAWS(credentials: 'aws-jenkins-credentials', region: 'us-east-1') {
                 sh '''
                     cd ~/Softserve_Demo/terraform/
                     terraform apply -auto-approve
                 '''
+                }
             }
         }
         stage('Destroy') {
