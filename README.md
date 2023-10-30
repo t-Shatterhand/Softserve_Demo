@@ -10,4 +10,6 @@ Kostroba Ivan\
 Many thanks to the other members of this development team for letting me to use our code for this demo project. \
 Basically, I needed something to deploy, so I did manage to build an image out of our app using Jenkins, Docker, AWS and hosted it in an ECR.
 Then, this image is being pulled by a deployment server and used to create a container to run our app. Check it out on:
- 
+
+https://app.kostroba.pp.ua/
+
