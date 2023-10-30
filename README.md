@@ -3,6 +3,8 @@ Demo Project to demonstrate the pipeline flow via Jenkins and AWS services
 
 
 Basic ShareYourText app was developed by 4 KNU students as their university project:\
+
+
 Julia Tkach\
 Zaichko Oleksandr\
 Zabudskyy Vladyslav\
