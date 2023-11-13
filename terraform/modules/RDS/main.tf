@@ -76,16 +76,18 @@ resource "aws_db_parameter_group" "db_param_group" {
     }
 }
 
-resource "aws_ssm_parameter" "db_pass_parameter" {
-	name        = "db_pass"
-	description = "Database password for Demo 2"
-    type        = "SecureString"
-    value       = random_password.db_pass.result
+resource "aws_secretsmanager_secret" "db_pass_secret" {
+  name                    = "db_pass"
+  description             = "Database password for Demo"
+  recovery_window_in_days = 7
+  tags = {
+    Environment = var.environment
+  }
+}
 
-    tags = {
-        Name        = "db_pass"
-        Environment = var.environment
-    }
+resource "aws_secretsmanager_secret_version" "db_pass_version" {
+  secret_id     = aws_secretsmanager_secret.db_pass_secret.id
+  secret_string = random_password.db_pass.result
 }
 
 resource "aws_ssm_parameter" "db_host_parameter" {

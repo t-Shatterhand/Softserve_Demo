@@ -4,9 +4,18 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-data "aws_ssm_parameter" "db_pass" {
-    name = "db_pass"
-    depends_on = [module.rds]
+data "aws_secretsmanager_secret" "db_pass" {
+  name = "db_pass"
+  depends_on = [
+        module.rds
+  ]
+}
+
+data "aws_secretsmanager_secret_version" "db_pass_latest" {
+  secret_id = data.aws_secretsmanager_secret.db_pass.id
+  depends_on = [
+        module.rds
+  ]
 }
 
 data "http" "myip" {

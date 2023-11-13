@@ -51,7 +51,7 @@ resource "kubernetes_deployment" "shareyourtext" {
 
           env {
             name = "ENV_DB_PASSWORD"
-            value = data.aws_ssm_parameter.db_pass.value
+            value = data.aws_secretsmanager_secret_version.db_pass_latest.secret_string
           }
 
           port {
