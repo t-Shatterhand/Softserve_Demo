@@ -1,0 +1,13 @@
+### First, you need to ensure you have installed helm and have the connection to your cluster through kubectl
+### After that, you will need to run following commands:
+
+helm repo add datadog https://helm.datadoghq.com
+
+helm repo update
+
+helm install datadog -n datadog --set datadog.clusterName='YOUR WANTED CLUSTER NAME HERER' --set datadog.site='datadoghq.com' \
+--set datadog.clusterAgent.replicas='2' --set datadog.clusterAgent.createPodDisruptionBugdet='true' \
+--set datadog.kubeStateMetricsEnabled=true --set datadog.kubeStateMetricsCore.enabled=true \
+--set datadog.logs.enabled=true --set datadog.logs.containerCollectAll=true \
+--set datadog.apiKey='YOUR DATADOG API KEY HERE' \
+--set datadog.processAgent.enabled=true datadog/datadog --create-namespace
